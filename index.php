@@ -76,10 +76,16 @@ if (isset($_POST['reset_password'])) {
         $stmt->bind_param("ss", $nova_senha, $email);
 
         if ($stmt->execute()) {
-            // Enviar e-mail com a nova senha
-            mail($email, "Nova Senha", "Sua nova senha é: $nova_senha");
+            // Enviar e-mail com a nova senha usando a função mail()
+            $assunto = "Nova Senha";
+            $mensagem = "Sua nova senha é: $nova_senha";
+            $headers = "From: no-reply@seusite.com";
 
-            $mensagem = "Uma nova senha foi enviada para seu e-mail.";
+            if (mail($email, $assunto, $mensagem, $headers)) {
+                $mensagem = "Uma nova senha foi enviada para seu e-mail.";
+            } else {
+                $erro = "Erro ao enviar o e-mail com a nova senha. Tente novamente.";
+            }
         } else {
             $erro = "Erro ao atualizar a senha. Tente novamente.";
         }
